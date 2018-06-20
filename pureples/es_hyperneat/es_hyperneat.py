@@ -51,7 +51,7 @@ class ESNetwork:
             hidden_idx += 1
 
         # For every coordinate, check the connections and create a node with corresponding connections if appropriate.
-        for (x, y), idx in coords_to_id.iteritems():
+        for (x, y), idx in coords_to_id.items():
             for c in connections:
                 if c.x2 == x and c.y2 == y:
                     draw_connections.append(c)
@@ -63,7 +63,7 @@ class ESNetwork:
                         nodes[idx] = [(coords_to_id[c.x1, c.y1], c.weight)]
 
         # Combine the indices with the connections/links forming node_evals used by the RecurrentNetwork.
-        for idx, links in nodes.iteritems():
+        for idx, links in nodes.items():
             node_evals.append((idx, self.activation, sum, 0.0, 1.0, links))
                     
         # Visualize the network?
@@ -129,16 +129,16 @@ class ESNetwork:
                 d_top = abs(c.w - query_cppn(coord, (c.x, c.y - p.width), outgoing, self.cppn, self.max_weight))
                 d_bottom = abs(c.w - query_cppn(coord, (c.x, c.y + p.width), outgoing, self.cppn, self.max_weight))
 
-            con = None
-            if max(min(d_top, d_bottom), min(d_left, d_right)) > self.band_threshold:
-                if outgoing:
-                    con = Connection(coord[0], coord[1], c.x, c.y, c.w)
-                else:
-                    con = Connection(c.x, c.y, coord[0], coord[1], c.w)
-            if con is not None:
-                # Nodes will only connect upwards. If connections to same layer is wanted, change to con.y1 <= con.y2.
-                if not c.w == 0.0 and con.y1 < con.y2 and not (con.x1 == con.x2 and con.y1 == con.y2):
-                    self.connections.add(con)
+                con = None
+                if max(min(d_top, d_bottom), min(d_left, d_right)) > self.band_threshold:
+                    if outgoing:
+                        con = Connection(coord[0], coord[1], c.x, c.y, c.w)
+                    else:
+                        con = Connection(c.x, c.y, coord[0], coord[1], c.w)
+                if con is not None:
+                    # Nodes will only connect upwards. If connections to same layer is wanted, change to con.y1 <= con.y2.
+                    if not c.w == 0.0 and con.y1 < con.y2 and not (con.x1 == con.x2 and con.y1 == con.y2):
+                        self.connections.add(con)
 
     # Explores the hidden nodes and their connections.
     def es_hyperneat(self):

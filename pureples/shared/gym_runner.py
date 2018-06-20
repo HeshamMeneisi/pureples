@@ -26,13 +26,13 @@ def run_es(gens, env, max_steps, config, params, substrate, max_trials=100, outp
 
             fitnesses = []
 
-            for i in xrange(trials):
+            for i in range(trials):
                 ob = env.reset()
                 net.reset()
 
                 total_reward = 0
 
-                for j in xrange(max_steps):
+                for j in range(max_steps):
                     for k in range(network.activations):
                         o = net.activate(ob)
                     action = np.argmax(o)
